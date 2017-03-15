@@ -785,7 +785,10 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
 
         if (onVideoFinishedCallback == null)
             return;
-
+        
+        if(totalTime <= TimeUnit.SECONDS.toMillis(1))
+            return; // Media isn't prepared yet
+       
         if (totalTime - currentTime <= TimeUnit.SECONDS.toMillis(2)) {
             onVideoFinishedCallback.done();
             if (onCountdownTimerFinish != null) {
