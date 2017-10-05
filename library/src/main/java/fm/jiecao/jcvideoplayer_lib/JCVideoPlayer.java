@@ -101,6 +101,7 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
     protected int mGestureDownVolume;
     protected int mSeekTimePosition;
     private OnVideoFinishedCallback onVideoFinishedCallback;
+    private boolean mFinished = false;
     private OnFullScreenStateChanged onFullScreenStateChanged;
     private boolean isWifiDialogEnabled = true;
     private OnCountdownTimerFinish onCountdownTimerFinish;
@@ -790,12 +791,16 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
             return; // Media isn't prepared yet
        
         if (totalTime - currentTime <= TimeUnit.SECONDS.toMillis(2)) {
-            onVideoFinishedCallback.done();
+            if(!mFinished) {
+                mFinished = true;
+                onVideoFinishedCallback.done();
+            }
             if (onCountdownTimerFinish != null) {
                 startCountdownTimer(onCountdownTimerFinish);
                 setOnCountdownTimerFinish(null);
             }
         }
+        else mFinished = false;
     }
 
     public void resetProgressAndTime() {
