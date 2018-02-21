@@ -18,21 +18,24 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
@@ -108,10 +111,10 @@ public class JCMediaManager implements ExoPlayer.EventListener, SimpleExoPlayer.
                         if (simpleExoPlayer != null) simpleExoPlayer.release();
                         isPreparing = true;
                         TrackSelection.Factory videoTrackSelectionFactory =
-                                new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-                        trackSelector = new DefaultTrackSelector(mMediaHandler, videoTrackSelectionFactory);
+                                new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+                        trackSelector = new DefaultTrackSelector();
                         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(((FuckBean) msg.obj).context, trackSelector, new DefaultLoadControl(),
-                                null, false);
+                                null, 0);
                         simpleExoPlayer.setPlayWhenReady(true);
                         MediaSource mediaSource = buildMediaSource(((FuckBean) msg.obj).context, Uri.parse(((FuckBean) msg.obj).url));
                         if (CURRENT_PLING_LOOP) {
@@ -210,7 +213,22 @@ public class JCMediaManager implements ExoPlayer.EventListener, SimpleExoPlayer.
     }
 
     @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
 
     }
 
@@ -227,9 +245,20 @@ public class JCMediaManager implements ExoPlayer.EventListener, SimpleExoPlayer.
     }
 
     @Override
-    public void onPositionDiscontinuity() {
+    public void onPositionDiscontinuity(int reason) {
 
     }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
+    }
+
 
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
@@ -250,10 +279,7 @@ public class JCMediaManager implements ExoPlayer.EventListener, SimpleExoPlayer.
 
     }
 
-    @Override
-    public void onVideoTracksDisabled() {
 
-    }
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
