@@ -748,6 +748,9 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
             } catch (IllegalStateException e) {
                 e.printStackTrace();
                 return position;
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                return position;
             }
         }
         return position;
